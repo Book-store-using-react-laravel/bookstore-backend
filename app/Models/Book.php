@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BookImage;
 
 class Book extends Model
 {
@@ -12,7 +13,12 @@ class Book extends Model
         'author',
         'price',
         'stock',
+        'images.*'
     ];
+
+    public function images(){
+        return $this->hasMany(BookImage::class);
+    }
 }
 
 // $book = new Book;

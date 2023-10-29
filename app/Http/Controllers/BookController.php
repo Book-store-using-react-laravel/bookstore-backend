@@ -10,7 +10,7 @@ class BookController extends Controller
     // Retrieve and return all books
     public function index()
     {
-        $books =  Book::all();
+        $books =  Book::with('images')->get();
         return response()->json($books, 200);
     }
 
@@ -21,7 +21,8 @@ class BookController extends Controller
             'title' => 'required',
             'author' => 'required',
             'price' => 'required|numeric',
-            'stock' => 'required|integer'
+            'stock' => 'required|integer',
+            'images.*'=> 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $book =  new Book;
@@ -31,13 +32,21 @@ class BookController extends Controller
         $book->stock = $request->stock;
         $book->save();
 
+        // image uploads
+        if($request->hasFile('images')){
+            foreach($request->file('images') as $image){
+                $path = $image->store('book_images');
+                $book->images()->create(['image_path'=>$path]);
+            }
+        }
+
         return response()->json($book,201);
     }
 
     // Search specific book
     public function show($id)
     {
-        $book = Book::find($id);
+        $book = Book::with('images')->find($id);
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
         }
