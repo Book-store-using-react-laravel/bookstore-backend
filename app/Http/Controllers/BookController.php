@@ -35,7 +35,8 @@ class BookController extends Controller
         // image uploads
         if($request->hasFile('images')){
             foreach($request->file('images') as $image){
-                $path = $image->store('book_images');
+                $orinalFileName = $image->getClientOriginalName();
+                $path = $image->storeAs('book_images', $orinalFileName, 'public');
                 $book->images()->create(['image_path'=>$path]);
             }
         }
