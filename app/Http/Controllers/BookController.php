@@ -68,7 +68,15 @@ class BookController extends Controller
             'author'=>'required',
             'price'=>'required|numeric',
             'stock'=>'required|integer',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle removal of existing images
+        $existingImageIds = $book->images->pluck('id')->toArray();
+        $imagesToDelete = $request->input('images_to_delete', []);
+        foreach ($imagesToDelete as $imageId) {
+            $book->images()->find($imageId)->delete();
+        }
 
         $book->title = $request->title;
         $book->author = $request->author;
@@ -76,10 +84,19 @@ class BookController extends Controller
         $book->stock = $request->stock;
         $book->save();
 
+        // Handle addition of new images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $originalFileName = $image->getClientOriginalName();
+                $path = $image->storeAs('book_images', $originalFileName, 'public');
+                $book->images()->create(['image_path' => $path]);
+            }
+        }
+
         return response()->json($book, 200);
     }
 
-    // Delete a book
+    // Delete a book using id
     public function destroy($id)
     {
         $book = Book::find($id);

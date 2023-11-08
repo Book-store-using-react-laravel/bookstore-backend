@@ -19,6 +19,16 @@ class Book extends Model
     public function images(){
         return $this->hasMany(BookImage::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($book) {
+            // Delete all images associated with this book
+            $book->images->each->delete();
+        });
+    }
 }
 
 // $book = new Book;
