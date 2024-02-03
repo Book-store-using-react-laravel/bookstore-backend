@@ -25,6 +25,7 @@ class BookController extends Controller
             'images.*'=> 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // create a new book and save it
         $book =  new Book;
         $book->title = $request->title;
         $book->author = $request->author;
@@ -32,7 +33,7 @@ class BookController extends Controller
         $book->stock = $request->stock;
         $book->save();
 
-        // image uploads
+        //handle image uploads
         if($request->hasFile('images')){
             foreach($request->file('images') as $image){
                 $orinalFileName = $image->getClientOriginalName();

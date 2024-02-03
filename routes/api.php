@@ -22,7 +22,7 @@ use App\Http\Controllers\BookController;
 
 Route::resource('books','App\Http\Controllers\BookController')->except(['create','edit']);
 
-//  breakdown of the routes created by 'Route::resource'
+//this route breakdown of the routes created by 'Route::resource'
 
 // GET /api/books - Retrieves all books (index method).
 // POST /api/books - Creates a new book (store method).
