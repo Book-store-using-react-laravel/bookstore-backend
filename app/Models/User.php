@@ -15,12 +15,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'contact_number',
+        'contact',
         'password',
-        'books',
-        'quantity',
-        'borrowed_date',
-        'returned_date',
     ];
 
     protected $hidden = [
@@ -30,5 +26,6 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 }
