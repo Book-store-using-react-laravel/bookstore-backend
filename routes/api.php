@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Book;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\API\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +18,18 @@ use App\Models\Book;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-use App\Http\Controllers\BookController;
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
-Route::resource('books','App\Http\Controllers\BookController')->except(['create','edit']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('member', [AuthController::class, 'member']);
+    Route::post('logout', [AuthController::class, 'logout']);
+});
+
+Route::resource('books', 'App\Http\Controllers\BookController')->except(['create', 'edit']);
+
+// write a markdown to give link to access postman api documentation
+// [Postman API Documentation](https://documenter.getpostman.com/view/15596400/TzJx8w7T)
 
 //this route breakdown of the routes created by 'Route::resource'
 
