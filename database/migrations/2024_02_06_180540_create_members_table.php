@@ -13,13 +13,9 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->foreignIdFor(\App\Models\User::class)->constrained()->cascadeOnDelete();
             $table->string('contact_number');
-            $table->unsignedBigInteger('member_id')->unique();
-            $table->json('books')->nullable();
-            $table->timestamp('borrowed_date')->useCurrent();
-            $table->timestamp('returned_date')->nullable();
+            $table->string('member_id');
             $table->rememberToken();
             $table->timestamps();
         });
